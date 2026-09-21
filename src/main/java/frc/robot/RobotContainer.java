@@ -23,6 +23,9 @@ import frc.robot.subsystems.vision.LimelightVisionSubsystem;
 import yams.mechanisms.swerve.utility.SwerveInputStream;
 import yams.motorcontrollers.simulation.BatterySim;
 
+import frc.robot.commands.Rumble;
+import frc.robot.utils.RumblePattern;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -99,6 +102,7 @@ public class RobotContainer
     driverXbox.y().whileTrue(swerve.driveToPointYAMS(new Pose2d(Meters.of(3), Meters.of(3), Rotation2d.fromDegrees(180))));
     driverXbox.start().and(driverXbox.back()).onTrue(swerve.zeroGyro());
     driverXbox.a().toggleOnTrue(Commands.startEnd(() -> headingControlEnabled = true, () -> headingControlEnabled = false));
+    driverXbox.b().onTrue(new Rumble(driverXbox.getHID(), RumblePattern.VISION_TARGET));
   }
 
   /**
