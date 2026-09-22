@@ -52,6 +52,13 @@ public class LEDs extends SubsystemBase {
 
     solid(fullSection, Color.kBlack); 
 
+    //state machine for LED animations
+    if (isEStopped == true) {
+      solid(fullSection, Color.kRed); 
+    } else if (DriverStation.isDisabled()) {
+      breath(fullSection, Color.kGhostWhite, Color.kDimGray, 2.0, Timer.getTimestamp());
+    }
+
     outputs.buffer = buffer;
     io.applyOutputs(outputs);
   }
@@ -62,7 +69,7 @@ public class LEDs extends SubsystemBase {
   // @author FRC6328 Mechanical Advantage
   // @see <a href=https://github.com/Mechanical-Advantage/RobotCode2026Public/blob/main/src/main/java/org/littletonrobotics/frc2026/subsystems/leds/Leds.java#L172</a>
   // */
-  
+
   private Color solid(Section section, Color color) {
     if (color != null) {
       for (int i = section.start(); i < section.end(); i++) {
