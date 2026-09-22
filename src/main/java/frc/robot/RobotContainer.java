@@ -102,7 +102,7 @@ public class RobotContainer
     driverXbox.y().whileTrue(swerve.driveToPointYAMS(new Pose2d(Meters.of(3), Meters.of(3), Rotation2d.fromDegrees(180))));
     driverXbox.start().and(driverXbox.back()).onTrue(swerve.zeroGyro());
     driverXbox.a().toggleOnTrue(Commands.startEnd(() -> headingControlEnabled = true, () -> headingControlEnabled = false));
-    driverXbox.b().onTrue(new Rumble(driverXbox.getHID(), RumblePattern.VISION_TARGET));
+    driverXbox.b().onTrue(new Rumble(driverXbox, RumblePattern.VISION_TARGET));
   }
 
   /**
