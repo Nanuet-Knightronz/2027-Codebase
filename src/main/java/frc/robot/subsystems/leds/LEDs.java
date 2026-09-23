@@ -21,8 +21,10 @@ import org.littletonrobotics.junction.Logger;
 
 public class LEDs extends SubsystemBase {
   
+  //state booleans
   public Optional<Alliance> alliance = Optional.empty();
   public boolean isEStopped = false;
+  public boolean lowBatteryAlert = false;
 
   private final LEDsIO io;
   private final LEDsIOInputsAutoLogged inputs = new LEDsIOInputsAutoLogged();
@@ -53,12 +55,50 @@ public class LEDs extends SubsystemBase {
     solid(fullSection, Color.kBlack); 
 
     //state machine for LED animations
-    if (isEStopped == true) {
-      solid(fullSection, Color.kRed); 
-    } else if (DriverStation.isDisabled()) {
-      breath(fullSection, Color.kGhostWhite, Color.kDimGray, 2.0, Timer.getTimestamp());
-    }
+    if (isEStopped) {
+        solid(fullSection, Color.kRed);
 
+    } else if (lowBatteryAlert) {
+        strobe(
+            fullSection,
+            Color.kOrange,
+            Color.kBlack,
+            LEDsConstants.strobeDuration);
+
+    } else if (DriverStation.isDisabled()) {
+        breathe(
+            fullSection,
+            Color.kGhostWhite,
+            Color.kDimGray,
+            2.0,
+            Timer.getTimestamp());
+
+    } else if (DriverStation.isAutonomous()) {
+        wave(
+            fullSection,
+            Color.kGold,
+            alliance.get() == Alliance.Red
+                    ? Color.kFirstRed
+                    : Color.kFirstBlue,
+            LEDsConstants.waveFastCycleLength,
+            LEDsConstants.waveFastDuration);
+
+    } else {
+        if (alliance.isEmpty()) {
+            breathe(
+                fullSection,
+                Color.kGold,
+                Color.kDarkGoldenrod,
+                2.0,
+                Timer.getTimestamp());
+        } else {
+            solid(
+                fullSection,
+                alliance.get() == Alliance.Red
+                    ? Color.kFirstRed
+                    : Color.kFirstBlue);
+        }
+    }
     outputs.buffer = buffer;
     io.applyOutputs(outputs);
   }
@@ -86,7 +126,7 @@ public class LEDs extends SubsystemBase {
   }
 
   @SuppressWarnings("unused")
-  private Color breath(Section section, Color c1, Color c2, double duration, double timestamp) {
+  private Color breathe(Section section, Color c1, Color c2, double duration, double timestamp) {
     Color color = breathCalculate(section, c1, c2, duration, timestamp);
     solid(section, color);
     return color;
