@@ -74,6 +74,8 @@ public class PhotonVisionSubsystem extends SubsystemBase
 
       cameraSim = new PhotonCameraSim(camera, cameraProps);
       cameraSim.enableDrawWireframe(true);
+      cameraSim.enableProcessedStream(true);
+      cameraSim.enableRawStream(true);
       visionSim.addCamera(cameraSim, ROBOT_TO_CAMERA);
     } else
     {

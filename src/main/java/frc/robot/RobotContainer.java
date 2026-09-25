@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.swervedrive.SwerveDriveSubsystem;
 import frc.robot.subsystems.vision.LimelightVisionSubsystem;
+import frc.robot.subsystems.vision.PhotonVisionSubsystem;
 import yams.mechanisms.swerve.utility.SwerveInputStream;
 import yams.motorcontrollers.simulation.BatterySim;
 
@@ -43,8 +44,8 @@ public class RobotContainer
   private final SendableChooser<Command> autoChooser;
 
   private final SwerveDriveSubsystem     swerve          = new SwerveDriveSubsystem();
-  private final LimelightVisionSubsystem limelightVision = new LimelightVisionSubsystem(swerve);
-//  private final PhotonVisionSubsystem    photonVision    = new PhotonVisionSubsystem(swerve);
+  // private final LimelightVisionSubsystem limelightVision = new LimelightVisionSubsystem(swerve);
+  private final PhotonVisionSubsystem    photonVision    = new PhotonVisionSubsystem(swerve);
 
   // Toggled by a button press to switch the drive stream between angular velocity (right stick X rotates) and
   // heading (right stick X/Y picks the desired heading angle) control.
