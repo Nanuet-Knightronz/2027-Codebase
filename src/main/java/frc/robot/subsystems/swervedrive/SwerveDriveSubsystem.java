@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -59,7 +60,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
       DegreesPerSecond.of(540), DegreesPerSecondPerSecond.of(720));
 
   private SwerveDrive                   drive;
-  private Canandgyro                    gyro;
+  private Pigeon2                    gyro;
 
 
   public SwerveDriveSubsystem()
@@ -75,7 +76,7 @@ public class SwerveDriveSubsystem extends SubsystemBase
     SwerveParser.parse(new File(Filesystem.getDeployDirectory(), "swerve/base"));
     SwerveDriveDevices devices = SwerveParser.createSwerveDriveDevices(cfg);
     drive = devices.swerveDrive();
-    gyro = (Canandgyro) devices.gyro();
+    gyro = (Pigeon2) devices.gyro();
     // You can also create the SwerveDrive without the ability to retrieve the devices like this.
     // drive = SwerveParser.createSwerveDrive(cfg);
 
@@ -193,9 +194,9 @@ public class SwerveDriveSubsystem extends SubsystemBase
     // Only required if you cant simulate the angular velocity of the gyro.
     if (RobotBase.isSimulation())
       return new AngularVelocity3d(RotationsPerSecond.zero(), RotationsPerSecond.zero(), RotationsPerSecond.zero());
-    return new AngularVelocity3d(RotationsPerSecond.of(gyro.getAngularVelocityRoll()),
-                                 RotationsPerSecond.of(gyro.getAngularVelocityPitch()),
-                                 RotationsPerSecond.of(gyro.getAngularVelocityYaw()));
+    return new AngularVelocity3d(RotationsPerSecond.of(gyro.getAngularVelocityXWorld().getValueAsDouble() / 360.0),
+                                 RotationsPerSecond.of(gyro.getAngularVelocityYWorld().getValueAsDouble() / 360.0),
+                                 RotationsPerSecond.of(gyro.getAngularVelocityZWorld().getValueAsDouble() / 360.0));
   }
 
   /**
